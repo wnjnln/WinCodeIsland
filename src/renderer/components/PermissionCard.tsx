@@ -169,7 +169,7 @@ export function PermissionCard({
     : undefined
 
   return (
-    <div className="flex flex-col gap-2 py-2.5">
+    <div className="flex flex-col gap-2 py-2.5" style={{ fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}>
       {/* Header: tool name + context */}
       <div className="flex items-center gap-1.5 px-3.5">
         <span className="text-[11px] font-bold" style={{ color: '#FFB347' }}>!</span>

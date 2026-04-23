@@ -3,6 +3,7 @@ import { PermissionCard } from './PermissionCard'
 import { QuestionCard } from './QuestionCard'
 import { CompactBar } from './CompactBar'
 import { ThinScrollView } from './ThinScrollView'
+import type { CSSProperties } from 'react'
 import type { Session } from '../../shared/events'
 
 interface IslandPanelProps {
@@ -35,6 +36,36 @@ interface IslandPanelProps {
   onQuit?: () => void
 }
 
+// ═══════════════════════════════════════════
+// CLI brand icons (from original CodeIsland project)
+// ═══════════════════════════════════════════
+
+function KimiIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} style={style}>
+      <path d="M12 3c.55 0 1.08.06 1.6.17a8 8 0 0 0 5.23 14.83A9 9 0 1 1 12 3z" fill="#4A6CF7" />
+    </svg>
+  )
+}
+
+function CliIcon({ source, className, style }: { source: string; className?: string; style?: CSSProperties }) {
+  switch (source) {
+    case 'claude':
+    case 'codex': {
+      const src = source === 'claude' ? './claude.png' : './codex.png'
+      const alt = source === 'claude' ? 'Claude' : 'Codex'
+      return (
+        <div className={`shrink-0 overflow-hidden ${className || ''}`} style={style}>
+          <img src={src} alt={alt} className="w-full h-full object-contain block" />
+        </div>
+      )
+    }
+    case 'kimi':
+      return <KimiIcon className={className} style={style} />
+    default: return null
+  }
+}
+
 type GroupDef = { key: string; label: string; sessions: Session[] }
 
 function groupByStatus(sessions: Session[]): GroupDef[] {
@@ -61,9 +92,11 @@ function groupByCli(sessions: Session[]): GroupDef[] {
   return groups
 }
 
-function GroupHeader({ label, count }: { label: string; count: number }) {
+function GroupHeader({ label, count, groupKey }: { label: string; count: number; groupKey: string }) {
+  const isCli = ['claude', 'codex', 'kimi'].includes(groupKey)
   return (
     <div className="flex items-center gap-2 px-1 py-1.5 text-[10px] font-medium text-white/50">
+      {isCli && <CliIcon source={groupKey} className="w-[14px] h-[14px]" />}
       <span>{label}</span>
       <span className="text-white/30">({count})</span>
     </div>
@@ -165,11 +198,11 @@ export function IslandPanel({
           {groups.map((group) => (
             <div key={group.key} className="flex flex-col gap-1">
               {(onlySessionId ? false : grouping !== 'all') && (
-                <GroupHeader label={group.label} count={group.sessions.length} />
+                <GroupHeader label={group.label} count={group.sessions.length} groupKey={group.key} />
               )}
               <div className="flex flex-col gap-2">
                 {group.sessions.map((s) => (
-                  <SessionCard key={s.sessionId} session={s} />
+                  <SessionCard key={s.sessionId} session={s} isCompletion={!!onlySessionId} />
                 ))}
               </div>
             </div>

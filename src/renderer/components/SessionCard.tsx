@@ -7,6 +7,7 @@ import type { Session } from '../../shared/events'
 
 interface SessionCardProps {
   session: Session
+  isCompletion?: boolean
 }
 
 function useAiMessageLines(): number {
@@ -49,7 +50,7 @@ function sessionLabel(sessionTitle?: string): string | undefined {
   return trimmed || undefined
 }
 
-export function SessionCard({ session }: SessionCardProps) {
+export function SessionCard({ session, isCompletion }: SessionCardProps) {
   const [hovering, setHovering] = useState(false)
   const aiMessageLines = useAiMessageLines()
   const aiLineLimit = aiMessageLines > 0 ? aiMessageLines : undefined
@@ -135,8 +136,10 @@ export function SessionCard({ session }: SessionCardProps) {
     ? recentMessages.slice(-2)
     : recentMessages
 
-  // Hover background
-  const bgClass = hovering ? 'bg-white/[0.10]' : 'bg-white/[0.05]'
+  // Hover background (green tint for completion cards)
+  const bgClass = isCompletion
+    ? (hovering ? 'bg-green-500/[0.12]' : 'bg-green-500/[0.06]')
+    : (hovering ? 'bg-white/[0.10]' : 'bg-white/[0.05]')
 
   return (
     <button
@@ -171,7 +174,7 @@ export function SessionCard({ session }: SessionCardProps) {
             <div className="flex items-center gap-1 min-w-0 overflow-hidden flex-1">
               <span
                 className="font-bold font-mono truncate cursor-pointer hover:opacity-80"
-                style={{ fontSize: fontSize + 2, color: projectColor }}
+                style={{ fontSize: fontSize + 2, color: projectColor, borderBottom: `1px dashed ${projectColor}` }}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleOpenFolder()
@@ -264,21 +267,28 @@ export function SessionCard({ session }: SessionCardProps) {
               )}
 
               {/* Terminal badge */}
-              <TerminalBadgeFromEvent
-                event={{
-                  _term_app: terminalType,
-                  _wt_session: wtSession,
-                  _wezterm_pane: weztermPane,
-                  _alacritty_window: alacrittyWindow,
-                  _kitty_window: kittyWindow,
-                  _tabby_pane: tabbyPane,
-                  _tmux: tmux,
-                  _tmux_pane: tmuxPane,
+              <span
+                className="inline-flex items-center px-[6px] py-[3px] rounded-[5px]"
+                style={{
+                  backgroundColor: 'rgba(76, 217, 100, 0.12)',
                 }}
-                onClick={() => {
-                  handleActivateTerminal()
-                }}
-              />
+              >
+                <TerminalBadgeFromEvent
+                  event={{
+                    _term_app: terminalType,
+                    _wt_session: wtSession,
+                    _wezterm_pane: weztermPane,
+                    _alacritty_window: alacrittyWindow,
+                    _kitty_window: kittyWindow,
+                    _tabby_pane: tabbyPane,
+                    _tmux: tmux,
+                    _tmux_pane: tmuxPane,
+                  }}
+                  onClick={() => {
+                    handleActivateTerminal()
+                  }}
+                />
+              </span>
             </div>
           </div>
 
@@ -339,6 +349,7 @@ export function SessionCard({ session }: SessionCardProps) {
               )}
             </div>
           )}
+
         </div>
       </div>
     </button>

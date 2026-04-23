@@ -48,7 +48,7 @@ function PixelButton({
         color: fg,
         backgroundColor: hovering ? bg : `${bg}cc`,
         border: `1px solid ${hovering ? border : `${border}66`}`,
-        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+        fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace',
       }}
     >
       {label}
@@ -86,13 +86,13 @@ function OptionRow({
       <div className="flex items-start gap-2 px-2.5 py-[7px]">
         <span
           className="text-[9px] font-bold shrink-0 w-[10px] text-center"
-          style={{ color: cyan, fontFamily: 'monospace' }}
+          style={{ color: cyan, fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}
         >
           {hovering ? '▸' : ' '}
         </span>
         <span
           className="text-[10px] font-semibold shrink-0 w-[18px]"
-          style={{ color: isSelected || hovering ? cyan : 'rgba(102,178,255,0.6)', fontFamily: 'monospace' }}
+          style={{ color: isSelected || hovering ? cyan : 'rgba(102,178,255,0.6)', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}
         >
           {index > 0 ? `${index}.` : '…'}
         </span>
@@ -101,14 +101,14 @@ function OptionRow({
             className="text-[10.5px]"
             style={{
               color: 'rgba(255,255,255,' + (hovering || isSelected ? '1' : '0.75') + ')',
-              fontFamily: 'monospace',
+              fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace',
               fontWeight: hovering ? 600 : 400,
             }}
           >
             {label}
           </span>
           {description && (
-            <span className="text-[9px] line-clamp-2" style={{ color: 'rgba(255,255,255,0.45)', fontFamily: 'monospace' }}>
+            <span className="text-[9px] line-clamp-2" style={{ color: 'rgba(255,255,255,0.45)', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}>
               {description}
             </span>
           )}
@@ -154,14 +154,14 @@ function MultiSelectRow({
             className="text-[10.5px]"
             style={{
               color: 'rgba(255,255,255,' + (hovering || isChecked ? '1' : '0.75') + ')',
-              fontFamily: 'monospace',
+              fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace',
               fontWeight: hovering ? 600 : 400,
             }}
           >
             {label}
           </span>
           {description && (
-            <span className="text-[9px] line-clamp-2" style={{ color: 'rgba(255,255,255,0.45)', fontFamily: 'monospace' }}>
+            <span className="text-[9px] line-clamp-2" style={{ color: 'rgba(255,255,255,0.45)', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}>
               {description}
             </span>
           )}
@@ -187,7 +187,7 @@ function TextInputRow({
 
   return (
     <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[4px]" style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
-      <span className="text-[10px] font-bold shrink-0" style={{ color: '#4CD964', fontFamily: 'monospace' }}>&gt;</span>
+      <span className="text-[10px] font-bold shrink-0" style={{ color: '#4CD964', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}>&gt;</span>
       <input
         ref={inputRef}
         type="text"
@@ -200,7 +200,7 @@ function TextInputRow({
         }}
         placeholder={placeholder}
         className="flex-1 bg-transparent text-[10.5px] outline-none placeholder:text-white/30"
-        style={{ color: 'rgba(255,255,255,1)', fontFamily: 'monospace' }}
+        style={{ color: 'rgba(255,255,255,1)', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}
       />
     </div>
   )
@@ -307,22 +307,22 @@ export function QuestionCard({
     <div className="flex flex-col gap-2 py-2.5">
       {/* Header */}
       <div className="flex items-center gap-1.5 px-3.5">
-        <span className="text-[11px] font-bold" style={{ color: cyan, fontFamily: 'monospace' }}>?</span>
+        <span className="text-[11px] font-bold" style={{ color: cyan, fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}>?</span>
         {header && (
           <span
             className="text-[9px] font-bold px-1 py-[1px] rounded-[3px]"
-            style={{ color: 'rgba(102,178,255,0.7)', backgroundColor: 'rgba(102,178,255,0.1)', fontFamily: 'monospace' }}
+            style={{ color: 'rgba(102,178,255,0.7)', backgroundColor: 'rgba(102,178,255,0.1)', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}
           >
             {header}
           </span>
         )}
-        <span className="text-[11px] font-medium flex-1 min-w-0 line-clamp-3" style={{ color: 'rgba(255,255,255,0.9)', fontFamily: 'monospace' }}>
+        <span className="text-[11px] font-medium flex-1 min-w-0 line-clamp-3" style={{ color: 'rgba(255,255,255,0.9)', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}>
           {currentQuestionText}
         </span>
         {totalQuestions > 1 && (
           <span
             className="text-[9px] font-bold px-1 py-[1px] rounded-[3px] shrink-0"
-            style={{ color: 'rgba(255,255,255,0.5)', backgroundColor: 'rgba(255,255,255,0.1)', fontFamily: 'monospace' }}
+            style={{ color: 'rgba(255,255,255,0.5)', backgroundColor: 'rgba(255,255,255,0.1)', fontFamily: '"Cascadia Code", "Microsoft YaHei", monospace' }}
           >
             {currentQuestionIndex + 1}/{totalQuestions}
           </span>

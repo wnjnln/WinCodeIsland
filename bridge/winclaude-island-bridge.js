@@ -52,8 +52,9 @@ async function main() {
   }
 
   // Fallback to shell detection only if no terminal program detected
+  let isPowerShell = false
   if (!termApp) {
-    const isPowerShell = !!(
+    isPowerShell = !!(
       process.env.PSModulePath ||
       process.env.PSExecutionPolicyPreference ||
       process.env.PSHOME ||
@@ -171,7 +172,7 @@ if ($ownerHwnd -eq 0 -and $wtPid) {
   if (isBlocking) {
     timeoutId = setTimeout(() => {
       finish(0, '{}')
-    }, 30000)
+    }, 120000)
   }
 
   const client = net.connect(pipeName)
@@ -196,18 +197,7 @@ if ($ownerHwnd -eq 0 -and $wtPid) {
 
   client.on('error', (err) => {
     process.stderr.write(`winclaude-island-bridge: ${err.message}\n`)
-    if (isBlocking) {
-      if (eventName === 'PermissionRequest') {
-        // Default to allow when the island is not running so the user isn't blocked
-        finish(0, JSON.stringify({
-          hookSpecificOutput: { hookEventName: 'PermissionRequest', decision: { behavior: 'allow' } }
-        }))
-      } else {
-        finish(1, '{}')
-      }
-    } else {
-      finish(0)
-    }
+    // Let the timeout handle cleanup; do not auto-allow so the user can decide later
   })
 }
 

@@ -173,11 +173,12 @@ function ZedIcon({ className, style }: { className?: string; style?: CSSProperti
 }
 
 function GenericTerminalIcon({ className, style }: { className?: string; style?: CSSProperties }) {
+  const cyan = '#73B8FF'
   return (
     <svg viewBox="0 0 24 24" className={className} style={style}>
-      <rect x="2" y="3" width="20" height="18" rx="3" fill="none" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M6 8l4 3.5L6 15" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="11" y="14" width="6" height="1.5" rx="0.5" fill="currentColor" />
+      <rect x="2" y="3" width="20" height="18" rx="3" fill="none" stroke={cyan} strokeWidth="1.5" />
+      <path d="M6 8l4 3.5L6 15" stroke={cyan} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="11" y="14" width="6" height="1.5" rx="0.5" fill={cyan} />
     </svg>
   )
 }
@@ -251,14 +252,14 @@ function ArrowIcon({ className, style }: { className?: string; style?: CSSProper
   )
 }
 
-export function TerminalBadge({ terminalType, size = 13, onClick }: TerminalBadgeProps) {
+export function TerminalBadge({ terminalType, size = 20, onClick }: TerminalBadgeProps) {
   if (!terminalType) return null
 
   const { name, Icon } = detectTerminal({ _term_app: terminalType })
 
   return (
     <div
-      className={`inline-flex items-center gap-[4px] px-[6px] py-[3px] rounded-[5px] bg-black/30 ${onClick ? 'cursor-pointer hover:bg-black/50' : ''}`}
+      className={`inline-flex items-center gap-[1px] px-[0.2px] py-[0.1px] rounded-[1px] ${onClick ? 'cursor-pointer' : ''}`}
       title={name}
       onClick={onClick}
     >
@@ -278,12 +279,12 @@ export function TerminalBadge({ terminalType, size = 13, onClick }: TerminalBadg
 }
 
 // Exported for SessionCard to pass full event data
-export function TerminalBadgeFromEvent({ event, size = 13, onClick }: { event: Record<string, unknown>; size?: number; onClick?: () => void }) {
+export function TerminalBadgeFromEvent({ event, size = 20, onClick }: { event: Record<string, unknown>; size?: number; onClick?: () => void }) {
   const { name, Icon } = detectTerminal(event)
 
   return (
     <div
-      className={`inline-flex items-center gap-[4px] px-[6px] py-[3px] rounded-[5px] bg-black/30 ${onClick ? 'cursor-pointer hover:bg-black/50' : ''}`}
+      className={`inline-flex items-center gap-[3px] px-[1px] py-[0.5px] rounded-[3px] ${onClick ? 'cursor-pointer' : ''}`}
       title={name}
       onClick={onClick}
     >
