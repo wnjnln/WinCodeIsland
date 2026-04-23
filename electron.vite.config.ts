@@ -35,6 +35,15 @@ export default defineConfig({
       }
     },
     publicDir: resolve(__dirname, 'resources'),
+    server: {
+      hmr: {
+        overlay: false,
+      },
+      watch: {
+        usePolling: true,
+        interval: 100,
+      },
+    },
     build: {
       outDir: 'out/renderer',
       rollupOptions: {

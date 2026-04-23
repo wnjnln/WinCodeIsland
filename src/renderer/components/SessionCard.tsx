@@ -167,8 +167,8 @@ export function SessionCard({ session }: SessionCardProps) {
         <div className="flex-1 min-w-0 flex flex-col" style={{ gap: 6 }}>
           {/* Header: project name + session label + short ID + tags */}
           <div className="flex items-center gap-2 min-w-0">
-            {/* SessionIdentityLine */}
-            <div className="flex items-center gap-1 min-w-0">
+            {/* SessionIdentityLine — flex-1 forces it to take all available space */}
+            <div className="flex items-center gap-1 min-w-0 overflow-hidden flex-1">
               <span
                 className="font-bold font-mono truncate cursor-pointer hover:opacity-80"
                 style={{ fontSize: fontSize + 2, color: projectColor }}
@@ -183,7 +183,7 @@ export function SessionCard({ session }: SessionCardProps) {
               {sLabel && (
                 <>
                   <span
-                    className="font-medium font-mono truncate shrink"
+                    className="font-medium font-mono truncate"
                     style={{ fontSize, color: 'rgba(255,255,255,0.76)' }}
                   >
                     #{sLabel}
@@ -204,11 +204,9 @@ export function SessionCard({ session }: SessionCardProps) {
               </span>
             </div>
 
-            {/* Spacer */}
-            <span className="flex-1 min-w-[8px]" />
-
             {/* Tags */}
             <div className="flex items-center gap-1 shrink-0">
+  
               {/* Remote tag */}
               {cliSource === 'other' && (
                 <span
