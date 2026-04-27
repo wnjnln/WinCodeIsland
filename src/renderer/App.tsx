@@ -175,8 +175,12 @@ export function App() {
     }
 
     setSessions((prev) => {
-      const existing = prev.find((s) => s.sessionId === sid)
-      const next = prev.filter((s) => s.sessionId !== sid)
+      // Deduplicate by cwd + cliSource: same tool in same directory is deduped
+      const filtered = cwd
+        ? prev.filter((s) => s.sessionId === sid || s.cwd !== cwd || s.cliSource !== cliSource)
+        : prev
+      const existing = filtered.find((s) => s.sessionId === sid)
+      const next = filtered.filter((s) => s.sessionId !== sid)
       let status: Session['status'] = 'idle'
       if (name === 'PreToolUse' || name === 'UserPromptSubmit') status = 'processing'
       if (name === 'PostToolUse' || name === 'SessionEnd' || name === 'Stop') status = 'idle'
@@ -229,6 +233,24 @@ export function App() {
       setSurface('completionCard')
     }
   })
+
+  // Auto-cleanup idle sessions: completed ones after 5s, stale idle ones after 5min
+  /*
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSessions((prev) => {
+        const now = Date.now()
+        return prev.filter((s) => {
+          if (s.status !== 'idle') return true
+          const age = now - (s.startedAt ?? now)
+          if (s.completed) return age < 5000
+          return age < 300000
+        })
+      })
+    }, 10000)
+    return () => clearInterval(interval)
+  }, [])
+  */
 
   usePermissionRequest((event: unknown) => {
     const e = event as Record<string, unknown>

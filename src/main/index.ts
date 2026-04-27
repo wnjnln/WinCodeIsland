@@ -7,7 +7,7 @@ import {
   setSessionMeta,
 } from './windowManager'
 import { createTray, destroyTray } from './trayManager'
-import { showSettingsWindow } from './settingsWindow'
+import { showSettingsWindow, setSettingsWindowTitle } from './settingsWindow'
 import { install, uninstall, isInstalled, installCLI, uninstallCLI, isCLIInstalled } from './configInstaller'
 import { appStore } from './store'
 import { NamedPipeServer } from './namedPipeServer'
@@ -213,6 +213,7 @@ ipcMain.handle('get-setting', (_event, key: string) => appStore.get(key as any))
 ipcMain.handle('set-setting', (_event, key: string, value: unknown) => appStore.set(key as any, value as any))
 ipcMain.handle('get-all-settings', () => appStore.store)
 ipcMain.handle('open-settings', () => { showSettingsWindow(); return undefined })
+ipcMain.handle('set-window-title', (_event, title: string) => { setSettingsWindowTitle(title); return undefined })
 
 // Path / terminal / session helpers
 ipcMain.handle('open-path', (_event, path: string) => shell.openPath(path))

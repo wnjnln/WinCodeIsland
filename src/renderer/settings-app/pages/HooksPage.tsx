@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useI18n } from '../hooks/useI18n'
 import { SettingRow } from '../components/SettingRow'
 
 interface CLIItem {
@@ -19,12 +20,14 @@ function CLIStatusCard({
   busy,
   onInstall,
   onUninstall,
+  t,
 }: {
   cli: CLIItem
   installed: boolean | null
   busy: boolean
   onInstall: () => void
   onUninstall: () => void
+  t: (key: string) => string
 }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-white/5">
@@ -42,7 +45,7 @@ function CLIStatusCard({
                 : 'text-white/30'
           }`}
         >
-          {installed === true ? 'Installed / 已安装' : installed === false ? 'Not Installed / 未安装' : 'Checking...'}
+          {installed === true ? t('hooks.installed') : installed === false ? t('hooks.notInstalled') : t('hooks.checking')}
         </span>
         <button
           onClick={installed ? onUninstall : onInstall}
@@ -53,7 +56,7 @@ function CLIStatusCard({
               : 'bg-[#66FF80]/15 text-[#66FF80] hover:bg-[#66FF80]/25'
           }`}
         >
-          {busy ? 'Working...' : installed ? 'Uninstall / 卸载' : 'Install / 安装'}
+          {busy ? t('hooks.working') : installed ? t('hooks.uninstall') : t('hooks.install')}
         </button>
       </div>
     </div>
@@ -61,6 +64,7 @@ function CLIStatusCard({
 }
 
 export function HooksPage() {
+  const { t } = useI18n()
   const [statuses, setStatuses] = useState<Record<string, boolean | null>>({})
   const [busyMap, setBusyMap] = useState<Record<string, boolean>>({})
 
@@ -103,8 +107,8 @@ export function HooksPage() {
 
   return (
     <div>
-      <h2 className="text-[16px] font-semibold mb-1">Hooks / CLI Hooks</h2>
-      <p className="text-[11px] text-white/40 mb-5">管理各 CLI 工具的 Hook 安装状态</p>
+      <h2 className="text-[16px] font-semibold mb-1">{t('hooks.title')}</h2>
+      <p className="text-[11px] text-white/40 mb-5">{t('hooks.subtitle')}</p>
 
       {CLI_LIST.map((cli) => (
         <CLIStatusCard
@@ -114,12 +118,13 @@ export function HooksPage() {
           busy={busyMap[cli.source] ?? false}
           onInstall={() => handleInstall(cli.source)}
           onUninstall={() => handleUninstall(cli.source)}
+          t={t}
         />
       ))}
 
       <div className="mt-6 text-[11px] text-white/30 leading-relaxed">
-        <p>Hooks 会自动将事件发送到 WinClaudeIsland 面板。</p>
-        <p>每个 CLI 独立管理，互不影响。</p>
+        <p>{t('hooks.desc1')}</p>
+        <p>{t('hooks.desc2')}</p>
       </div>
     </div>
   )

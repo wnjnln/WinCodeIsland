@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { useI18n } from '../hooks/useI18n'
 import { AppLogo } from '../../components/AppLogo'
 
 export function AboutPage() {
+  const { t } = useI18n()
   const [checking, setChecking] = useState(false)
 
   const version = '0.1.0'
@@ -11,13 +13,13 @@ export function AboutPage() {
       <AppLogo size={80} showBackground />
 
       <h2 className="text-[18px] font-semibold mt-4">WinClaudeIsland</h2>
-      <p className="text-[12px] text-white/40 mt-1">Version {version}</p>
+      <p className="text-[12px] text-white/40 mt-1">{t('about.version')} {version}</p>
 
       <p className="text-[13px] text-white/70 mt-4 text-center max-w-[360px]">
-        Real-time AI coding agent status panel for Windows
+        {t('about.desc')}
       </p>
       <p className="text-[11px] text-white/40 mt-1 text-center">
-        基于 CodeIsland 移植的 Windows 版本
+        {t('about.ported')}
       </p>
 
       <div className="flex flex-col gap-3 mt-6 w-full max-w-[300px]">
@@ -38,12 +40,12 @@ export function AboutPage() {
           disabled={checking}
           className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-white/5 hover:bg-white/10 text-[12px] text-white/80 transition-colors disabled:opacity-50"
         >
-          {checking ? 'Checking... / 检查中' : 'Check for Updates / 检查更新'}
+          {checking ? t('about.checking') : t('about.checkUpdate')}
         </button>
       </div>
 
       <div className="mt-8 text-[10px] text-white/20 text-center">
-        <p>MIT License</p>
+        <p>{t('about.license')}</p>
         <p className="mt-1">Ported from CodeIsland by wxtsky</p>
       </div>
     </div>

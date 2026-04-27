@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, Menu } from 'electron'
 import { join } from 'path'
 import { existsSync } from 'fs'
 
@@ -15,6 +15,12 @@ function getPreloadPath(): string {
 
 export function showSettingsWindow(): void {
   if (settingsWindow && !settingsWindow.isDestroyed()) {
+    if (settingsWindow.isMinimized()) {
+      settingsWindow.restore()
+    }
+    if (!settingsWindow.isVisible()) {
+      settingsWindow.show()
+    }
     settingsWindow.focus()
     return
   }
@@ -26,7 +32,7 @@ export function showSettingsWindow(): void {
     minHeight: 420,
     frame: true,
     transparent: false,
-    alwaysOnTop: false,
+    alwaysOnTop: true,
     skipTaskbar: false,
     hasShadow: true,
     resizable: true,
@@ -55,6 +61,8 @@ export function showSettingsWindow(): void {
     settingsWindow?.show()
   })
 
+  settingsWindow.setMenu(null)
+
   settingsWindow.on('closed', () => {
     settingsWindow = null
   })
@@ -64,5 +72,11 @@ export function closeSettingsWindow(): void {
   if (settingsWindow && !settingsWindow.isDestroyed()) {
     settingsWindow.close()
     settingsWindow = null
+  }
+}
+
+export function setSettingsWindowTitle(title: string): void {
+  if (settingsWindow && !settingsWindow.isDestroyed()) {
+    settingsWindow.setTitle(title)
   }
 }

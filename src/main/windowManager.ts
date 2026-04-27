@@ -1,4 +1,4 @@
-import { BrowserWindow, Display } from 'electron'
+import { BrowserWindow, Display, Menu } from 'electron'
 import { join } from 'path'
 import { existsSync } from 'fs'
 import { appStore } from './store'
@@ -54,6 +54,7 @@ function buildWindowForDisplay(display: Display): BrowserWindow {
 
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
   win.setIgnoreMouseEvents(false)
+  win.setMenu(null)
 
   if (process.env.VITE_DEV_SERVER_URL) {
     win.webContents.openDevTools({ mode: 'detach' })

@@ -69,6 +69,44 @@ async function main() {
   log(`[WCI-BRIDGE] termApp="${termApp}" isPowerShell=${isPowerShell} TERM_PROGRAM="${process.env.TERM_PROGRAM || ''}" PSModulePath=${process.env.PSModulePath ? 'yes' : 'no'} title="${process.title || ''}"\n`)
   payload._tty = process.env.TTY || ''
   payload._ppid = process.ppid
+
+  // Find the actual CLI process (claude.exe, codex.exe, kimi.exe) by walking up parent chain.
+  // process.ppid alone may return a short-lived shell/cmd wrapper, not the real CLI.
+  if (process.platform === 'win32') {
+    try {
+      const { execSync } = require('child_process')
+      const psScript = `
+$targetPid = ${process.pid}
+# Skip bridge.js itself — start from parent process
+$proc = Get-CimInstance Win32_Process -Filter "ProcessId = $targetPid" -ErrorAction SilentlyContinue
+if ($proc) { $targetPid = $proc.ParentProcessId }
+if ($targetPid -le 4) { "" ; return }
+
+$cliNames = @('claude.exe','codex.exe','kimi.exe')
+$cliPid = $null
+for ($i = 0; $i -lt 10; $i++) {
+    $proc = Get-CimInstance Win32_Process -Filter "ProcessId = $targetPid" -ErrorAction SilentlyContinue
+    if (-not $proc) { break }
+    $name = $proc.Name.ToLower()
+    if ($cliNames -contains $name) { $cliPid = $targetPid; break }
+    # Claude Code on Windows often runs as node.exe via npm wrapper — detect by command line.
+    if ($name -eq 'node.exe' -and $proc.CommandLine -match 'claude|codex|kimi') { $cliPid = $targetPid; break }
+    $targetPid = $proc.ParentProcessId
+    if ($targetPid -le 4) { break }
+}
+if ($cliPid) { "$cliPid" } else { "" }
+`
+      const result = execSync(`powershell -WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -Command "${psScript}"`, { encoding: 'utf-8', timeout: 5000 }).trim()
+      const n = parseInt(result, 10)
+      if (!isNaN(n) && n > 0) {
+        payload._cli_pid = n
+        log(`[WCI-BRIDGE] detected CLI PID=${n}\n`)
+      }
+    } catch (err) {
+      log(`[WCI-BRIDGE] CLI PID detection error: ${err?.message || err}\n`)
+    }
+  }
+
   if (source) {
     payload._source = source
   }

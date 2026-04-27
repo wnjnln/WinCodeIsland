@@ -1,7 +1,9 @@
 import { useSetting } from '../hooks/useSetting'
+import { useI18n } from '../hooks/useI18n'
 import { SettingRow, Switch, Select } from '../components/SettingRow'
 
 export function BehaviorPage() {
+  const { t } = useI18n()
   const [hideInFullscreen, setHideInFullscreen] = useSetting('hideInFullscreen', true)
   const [hideWhenNoSession, setHideWhenNoSession] = useSetting('hideWhenNoSession', false)
   const [smartSuppress, setSmartSuppress] = useSetting('smartSuppress', true)
@@ -11,31 +13,31 @@ export function BehaviorPage() {
 
   return (
     <div>
-      <h2 className="text-[16px] font-semibold mb-1">Behavior / 行为</h2>
-      <p className="text-[11px] text-white/40 mb-5">面板交互与会话行为配置</p>
+      <h2 className="text-[16px] font-semibold mb-1">{t('behavior.title')}</h2>
+      <p className="text-[11px] text-white/40 mb-5">{t('behavior.subtitle')}</p>
 
-      <SettingRow label="Hide in Fullscreen / 全屏隐藏" description="任何应用进入全屏时自动隐藏面板">
+      <SettingRow label={t('hideInFullscreen.label')} description={t('hideInFullscreen.desc')}>
         <Switch checked={hideInFullscreen} onChange={setHideInFullscreen} />
       </SettingRow>
 
-      <SettingRow label="Auto-hide When No Session / 无会话隐藏" description="无 AI 会话运行时完全隐藏面板">
+      <SettingRow label={t('hideWhenNoSession.label')} description={t('hideWhenNoSession.desc')}>
         <Switch checked={hideWhenNoSession} onChange={setHideWhenNoSession} />
       </SettingRow>
 
-      <SettingRow label="Smart Suppress / 智能抑制" description="当终端在前台时不自动展开面板">
+      <SettingRow label={t('smartSuppress.label')} description={t('smartSuppress.desc')}>
         <Switch checked={smartSuppress} onChange={setSmartSuppress} />
       </SettingRow>
 
-      <SettingRow label="Collapse on Mouse Leave / 鼠标移开折叠" description="鼠标移出面板区域后自动折叠">
+      <SettingRow label={t('collapseOnMouseLeave.label')} description={t('collapseOnMouseLeave.desc')}>
         <Switch checked={collapseOnMouseLeave} onChange={setCollapseOnMouseLeave} />
       </SettingRow>
 
-      <SettingRow label="Idle Session Cleanup / 空闲清理" description="自动清理无活动会话的时间">
+      <SettingRow label={t('idleSessionCleanup.label')} description={t('idleSessionCleanup.desc')}>
         <Select
           value={idleSessionCleanup}
           onChange={setIdleSessionCleanup}
           options={[
-            { value: 0, label: 'Never / 从不' },
+            { value: 0, label: t('idleSessionCleanup.never') },
             { value: 10, label: '10 min' },
             { value: 30, label: '30 min' },
             { value: 60, label: '1 hour' },
@@ -44,7 +46,7 @@ export function BehaviorPage() {
         />
       </SettingRow>
 
-      <SettingRow label="Session Rotation / 会话轮播" description="折叠栏切换活动会话的频率">
+      <SettingRow label={t('sessionRotation.label')} description={t('sessionRotation.desc')}>
         <Select
           value={sessionRotationInterval}
           onChange={setSessionRotationInterval}

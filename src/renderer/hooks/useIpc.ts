@@ -37,6 +37,15 @@ export function useSurfaceChanged(callback: (surface: IslandSurface) => void) {
   }, [callback])
 }
 
+export function useSessionEnded(callback: (sessionId: string) => void) {
+  useEffect(() => {
+    const unsubscribe = window.ipcAPI.onSessionEnded(callback)
+    return () => {
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
+  }, [callback])
+}
+
 export function useIpc() {
   const sendPermissionDecision = useCallback((behavior: 'allow' | 'deny', always?: boolean, toolName?: string) => {
     window.ipcAPI.sendPermissionDecision({ behavior, always, toolName })

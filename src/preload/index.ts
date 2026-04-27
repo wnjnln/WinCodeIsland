@@ -6,6 +6,7 @@ export interface IpcAPI {
   onPermissionRequest: (callback: (event: unknown) => void) => () => void
   onQuestionRequest: (callback: (event: unknown) => void) => () => void
   onSurfaceChanged: (callback: (surface: IslandSurface) => void) => () => void
+  onSessionEnded: (callback: (sessionId: string) => void) => () => void
   sendPermissionDecision: (decision: { behavior: 'allow' | 'deny'; always?: boolean; toolName?: string }) => void
   sendQuestionAnswer: (answer: string | { answers: Record<string, string> }) => void
   toggleExpand: () => void
@@ -25,6 +26,7 @@ export interface IpcAPI {
   activateTerminal: (terminalType: string, pid?: number, hwnd?: number) => Promise<boolean>
   readSessionTitle: (sessionId: string, provider: string, cwd?: string) => Promise<string | null>
   getForegroundProcess: () => Promise<string>
+  setWindowTitle: (title: string) => Promise<void>
 }
 
 const api: IpcAPI = {
@@ -48,6 +50,11 @@ const api: IpcAPI = {
     ipcRenderer.on('surface-changed', handler)
     return () => ipcRenderer.off('surface-changed', handler)
   },
+  onSessionEnded: (cb) => {
+    const handler = (_: Electron.IpcRendererEvent, data: unknown) => cb(data as string)
+    ipcRenderer.on('session-ended', handler)
+    return () => ipcRenderer.off('session-ended', handler)
+  },
   sendPermissionDecision: (decision) => ipcRenderer.send('permission-decision', decision),
   sendQuestionAnswer: (answer) => ipcRenderer.send('question-answer', answer),
   toggleExpand: () => ipcRenderer.send('toggle-expand'),
@@ -67,6 +74,7 @@ const api: IpcAPI = {
   activateTerminal: (terminalType: string, pid?: number, hwnd?: number) => ipcRenderer.invoke('activate-terminal', terminalType, pid, hwnd),
   readSessionTitle: (sessionId: string, provider: string, cwd?: string) => ipcRenderer.invoke('read-session-title', sessionId, provider, cwd),
   getForegroundProcess: () => ipcRenderer.invoke('get-foreground-process'),
+  setWindowTitle: (title: string) => ipcRenderer.invoke('set-window-title', title),
 }
 
 contextBridge.exposeInMainWorld('ipcAPI', api)

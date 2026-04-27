@@ -1,7 +1,9 @@
 import { useSetting } from '../hooks/useSetting'
+import { useI18n } from '../hooks/useI18n'
 import { SettingRow, Switch, Slider } from '../components/SettingRow'
 
 export function SoundPage() {
+  const { t } = useI18n()
   const [soundEnabled, setSoundEnabled] = useSetting('soundEnabled', true)
   const [volume, setVolume] = useSetting('volume', 50)
   const [soundEventStart, setSoundEventStart] = useSetting('soundEventStart', true)
@@ -13,44 +15,44 @@ export function SoundPage() {
 
   return (
     <div>
-      <h2 className="text-[16px] font-semibold mb-1">Sound / 声音</h2>
-      <p className="text-[11px] text-white/40 mb-5">音效开关与音量配置</p>
+      <h2 className="text-[16px] font-semibold mb-1">{t('sound.title')}</h2>
+      <p className="text-[11px] text-white/40 mb-5">{t('sound.subtitle')}</p>
 
-      <SettingRow label="Enable Sound Effects / 启用音效" description="全局音效开关">
+      <SettingRow label={t('soundEnabled.label')} description={t('soundEnabled.desc')}>
         <Switch checked={soundEnabled} onChange={setSoundEnabled} />
       </SettingRow>
 
-      <SettingRow label="Volume / 音量" description="全局音效音量">
+      <SettingRow label={t('volume.label')} description={t('volume.desc')}>
         <Slider value={volume} min={0} max={100} step={5} onChange={setVolume} suffix="%" />
       </SettingRow>
 
-      <div className="mt-4 mb-2 text-[12px] font-medium text-white/60">Sessions / 会话事件</div>
+      <div className="mt-4 mb-2 text-[12px] font-medium text-white/60">{t('soundEvents.title')}</div>
 
-      <SettingRow label="Session Start / 会话开始" description="新会话启动时播放">
+      <SettingRow label={t('soundEventStart.label')} description={t('soundEventStart.desc')}>
         <Switch checked={soundEventStart} onChange={setSoundEventStart} />
       </SettingRow>
 
-      <SettingRow label="Task Complete / 任务完成" description="任务成功完成时播放">
+      <SettingRow label={t('soundEventComplete.label')} description={t('soundEventComplete.desc')}>
         <Switch checked={soundEventComplete} onChange={setSoundEventComplete} />
       </SettingRow>
 
-      <SettingRow label="Task Error / 任务出错" description="任务失败或报错时播放">
+      <SettingRow label={t('soundEventError.label')} description={t('soundEventError.desc')}>
         <Switch checked={soundEventError} onChange={setSoundEventError} />
       </SettingRow>
 
-      <div className="mt-4 mb-2 text-[12px] font-medium text-white/60">Interaction / 交互事件</div>
+      <div className="mt-4 mb-2 text-[12px] font-medium text-white/60">{t('interactionEvents.title')}</div>
 
-      <SettingRow label="Approval Needed / 需要授权" description="需要用户授权时播放">
+      <SettingRow label={t('soundEventApproval.label')} description={t('soundEventApproval.desc')}>
         <Switch checked={soundEventApproval} onChange={setSoundEventApproval} />
       </SettingRow>
 
-      <SettingRow label="Prompt Submit / 提交提示" description="用户提交问题时播放">
+      <SettingRow label={t('soundEventSubmit.label')} description={t('soundEventSubmit.desc')}>
         <Switch checked={soundEventSubmit} onChange={setSoundEventSubmit} />
       </SettingRow>
 
-      <div className="mt-4 mb-2 text-[12px] font-medium text-white/60">System / 系统事件</div>
+      <div className="mt-4 mb-2 text-[12px] font-medium text-white/60">{t('systemEvents.title')}</div>
 
-      <SettingRow label="Boot Sound / 启动音效" description="应用启动时播放">
+      <SettingRow label={t('soundEventBoot.label')} description={t('soundEventBoot.desc')}>
         <Switch checked={soundEventBoot} onChange={setSoundEventBoot} />
       </SettingRow>
     </div>
